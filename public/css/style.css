@@ -1,0 +1,9 @@
+.top-buffer { margin-top:20px; }
+
+.cursor-pointer { cursor: pointer; }
+
+.hidden { display: none; }
+
+.ads-container { border: 1px solid lightgray; }
+
+.message { color: red; font-weight: bold; }
