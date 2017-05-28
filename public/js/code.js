@@ -50,6 +50,23 @@ $(".questions-by-city-select").change(function(){
         $(parent_container).find(".question").hide();
         $(parent_container).find(".question[data-city-id='" + selected_city_id + "']").show();
     }
+
+    var questions_of_date = $(parent_container).find(".questions-of-date");
+    for (var i = 0; i < questions_of_date.length; i++) {
+        var hidden = true;
+
+        var questions = $(questions_of_date[i]).find(".question");
+
+        for (var j = 0; j < questions.length; j++) {
+            if ($(questions[j]).css("display") != 'none')
+                hidden = false;
+        }
+
+        if (hidden)
+            $(questions_of_date[i]).hide();
+        else
+            $(questions_of_date[i]).show();
+    }
 });
 
 function LoadQuestionModal (questionId) {

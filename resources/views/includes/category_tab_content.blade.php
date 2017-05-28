@@ -11,11 +11,13 @@
 
 
     @foreach($category->groupedQuestions as $date => $questionsOfDate)
-        <H4>{{ $date }}</H4>
+        <div class="questions-of-date" data-day="{{ $date }}">
 
-        @foreach($questionsOfDate as $question)
-            @include('includes.question', ["question" => $question])
-        @endforeach
+            <H4>{{ $date }}</H4>
+            @foreach($questionsOfDate as $question)
+                @include('includes.question', ["question" => $question])
+            @endforeach
+        </div>
     @endforeach
 
 </div>
