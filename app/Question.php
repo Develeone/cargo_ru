@@ -15,7 +15,7 @@ class Question extends Model
 
     function answers()
     {
-        return $this->hasMany('App\Answer');
+        return $this->hasMany('App\Answer')->with('get_owner');
     }
 
     function userAnswered ($user_id) {

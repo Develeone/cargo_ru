@@ -1,19 +1,16 @@
 @extends('layouts.sidebars')
 
-@section('questions')
+@section('central_content')
     <ul class="nav nav-tabs">
         @for($i = 0; $i < $categories->count(); $i++)
             <li class="{{$i == 0 ? 'active' : ''}}">
-                <a data-toggle="tab" href="#{{$categories[$i]->name}}">{{$categories[$i]->name}}</a>
+                <a data-toggle="tab" href="#category" class="category-tab" data-category-id="{{$categories[$i]->id}}">{{$categories[$i]->name}}</a>
             </li>
         @endfor
     </ul>
 
     <div class="tab-content">
-
-        @foreach($categories as $category)
-            @include('includes.category_tab_content')
-        @endforeach
+        @include('includes.category_tab_content')
     </div>
 
     @include('includes.question_modal')

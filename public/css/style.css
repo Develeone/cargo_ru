@@ -4,6 +4,27 @@
 
 .hidden { display: none; }
 
-.ads-container { border: 1px solid lightgray; }
+.ads-container { border: 1px solid #ddd; border-radius: 3px; }
 
-.message { color: red; font-weight: bold; }
+.centered-content { width: 100%; text-align: center; }
+
+
+.captcha_image { cursor: pointer; }
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #f5f5f5;
+}

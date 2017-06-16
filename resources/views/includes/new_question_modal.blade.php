@@ -12,8 +12,8 @@
             <div class="modal-body">
                 <form id="new-question">
                     {{ csrf_field() }}
-                    <p>
-                        <select name="category_id" class="category-select">
+                    <div class="form-group">
+                        <select name="category_id" class="category-select form-control">
                             @foreach($categories as $category)
                                 <option value="{{$category->id}}" data-need-cities="{{!is_null($category->needCities)}}">
                                     {{$category->name}}
@@ -21,17 +21,21 @@
                             @endforeach
                         </select>
 
-                        <select name="city_id" class="city-select {{ is_null($categories->first()->needCities) ? 'hidden' : '' }}">
+                        <select name="city_id" class="city-select form-control top-buffer {{ is_null($categories->first()->needCities) ? 'hidden' : '' }}">
                             <option selected disabled>Выберите город</option>
                             @foreach(\App\City::all() as $city)
                                 <option value="{{ $city->id }}">{{ $city->name }}</option>
                             @endforeach
                         </select>
-                    </p>
+                    </div>
 
-                    <textarea name="text" placeholder="Введите свой вопрос"></textarea>
+                    <textarea name="text" placeholder="Введите свой вопрос" class="form-control"></textarea>
 
-                    <p><input type="submit" id="submit-question-button" value="Отправить"></p>
+                    <br />
+
+                    <div class="g-recaptcha" data-sitekey="{{ env('RE_CAP_SITE') }}"></div>
+
+                    <p><input type="submit" id="submit-question-button" value="Отправить" class="form-control btn-success top-buffer"></p>
                 </form>
             </div>
             <div class="modal-footer">

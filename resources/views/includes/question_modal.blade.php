@@ -15,14 +15,21 @@
                 </div>
 
                 <form id="new-answer" class="hidden">
+                    <H4>Ответить на вопрос:</H4>
                     {{ csrf_field() }}
                     <input type="hidden" name="question_id" id="question-id" value="">
-                    <input type="text"   name="text" placeholder="Введите ваш ответ">
-                    <input type="submit" id="submit-answer-button" value="Отправить">
+                    <textarea            name="text"    placeholder="Введите ваш ответ" class="form-control top-buffer"></textarea>
+                    <input type="text"   name="email"   placeholder="E-mail"    class="form-control top-buffer">
+                    <input type="text"   name="phone"   placeholder="Телефон"   class="form-control top-buffer">
+
+                    <br />
+
+                    <div class="g-recaptcha" data-sitekey="{{ env('RE_CAP_SITE') }}"></div>
+
+                    <input type="submit" id="submit-answer-button" value="Отправить" class="form-control btn-success top-buffer">
                 </form>
 
-                <div class="message">
-                </div>
+                <div class="alert alert-info message top-buffer"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>

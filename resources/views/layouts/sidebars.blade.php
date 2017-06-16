@@ -7,7 +7,7 @@
             @include('includes.left_sidebar')
         </div>
         <div class="col-md-8">
-            @yield('questions')
+            @yield('central_content')
         </div>
         <div class="col-md-2 ads-container">
             @include('includes.right_sidebar')

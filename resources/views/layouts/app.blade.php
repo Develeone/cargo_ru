@@ -14,6 +14,10 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
+    <script src="{{ asset('js/vendor/lodash.core.js') }}"></script>
+
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+
     <script type="text/javascript">
         var auth_id = "{{ Auth::id() }}";
     </script>
@@ -89,6 +93,13 @@
             @yield('content')
 
         </div>
+
+        <footer class="footer">
+            <div class="container">
+                <p class="text-muted">Футер, который всегда располагается внизу независимо от количества контента на странице.</p>
+                <a href="/ads">Реклама на сайте</a>
+            </div>
+        </footer>
     </div>
 
     <!-- Scripts -->

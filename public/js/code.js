@@ -1,3 +1,5 @@
+var selectedCategoryId = 0;
+
 $("#new-answer").submit(function (e) {
     e.preventDefault();
 
@@ -10,7 +12,7 @@ $("#new-answer").submit(function (e) {
         var answers_count = parseInt(answers_counter.html());
         answers_counter.html(++answers_count);
 
-        if (answers_count >= 10)
+        if (answers_count >= 15)
             question_solved_checkbox.attr('checked', 'checked');
     });
 });
@@ -39,34 +41,31 @@ $("#new-question-modal .category-select").change(function(){
     }
 });
 
-$(".questions-by-city-select").change(function(){
-    var selected_city_id = $(this).val();
+$(".category-tab").click(function(){
+    selectedCategoryId = $(this).attr("data-category-id");
 
-    var parent_container = $(this).parent();
+    $.get("/category/"+selectedCategoryId+"/getContent", function (category) {
+        ShowCategory(category);
+    })
+});
 
-    if (selected_city_id == "all")
-        $(parent_container).find(".question").show();
-    else {
-        $(parent_container).find(".question").hide();
-        $(parent_container).find(".question[data-city-id='" + selected_city_id + "']").show();
+function CategoryCityChanged (caller){
+    var selectedCityId = $(caller).val();
+
+    if (selectedCityId == "all") {
+        $.get("/category/"+selectedCategoryId+"/getContent", function (category) {
+            ShowCategory(category);
+        })
     }
 
-    var questions_of_date = $(parent_container).find(".questions-of-date");
-    for (var i = 0; i < questions_of_date.length; i++) {
-        var hidden = true;
+    $.get("/category/"+selectedCategoryId+"/getContent?city="+selectedCityId, function (category) {
+        ShowCategory(category);
+    })
+}
 
-        var questions = $(questions_of_date[i]).find(".question");
-
-        for (var j = 0; j < questions.length; j++) {
-            if ($(questions[j]).css("display") != 'none')
-                hidden = false;
-        }
-
-        if (hidden)
-            $(questions_of_date[i]).hide();
-        else
-            $(questions_of_date[i]).show();
-    }
+$(".captcha_image").click(function () {
+    var randomLetter = String.fromCharCode(Math.floor(Math.random() * (122 - 97)) + 97);
+    $(this).attr("src", $(this).attr("src")+randomLetter);
 });
 
 function LoadQuestionModal (questionId) {
@@ -76,8 +75,15 @@ function LoadQuestionModal (questionId) {
 
         // Set answers
         var answersHtml = "";
-        for (var i = 0; i < question.answers.length; i++)
-            answersHtml += "<li>" + question.answers[i].text + "</li>";
+
+        for (var i = 0; i < question.answers.length; i++) {
+            answersHtml += "<div>" +
+                "<b>" + question.answers[i].get_owner.name + "</b>: " +
+                question.answers[i].text +
+                "<br />" +
+                "<button data-answer-id='"+question.answers[i].id+"' onclick='GetContacts($(this));'>Получить контакты</button>"+
+                "</div><hr>";
+        }
 
         if (auth_id == question.owner)
             $("#question-modal #answers-container").html(answersHtml);
@@ -93,24 +99,75 @@ function LoadQuestionModal (questionId) {
         }).length;
 
         // Show or hide new answer form
-        if (!auth_id || question.owner == auth_id || isUserAnswerExists || question.answers.length >= 10) {
+        if (!auth_id || question.owner == auth_id || isUserAnswerExists || question.answers.length >= 15) {
             newAnswerForm.addClass('hidden');
+
+            messageBlock.show();
 
             if (!auth_id)
                 messageBlock.html("Вы должны быть зарегистрированы для того чтобы отвечать на вопросы");
-            else if (question.answers.length >= 10)
+            else if (question.answers.length >= 15)
                 messageBlock.html("Вопрос закрыт, на него больше нельзя отвечать");
             else if (isUserAnswerExists)
                 messageBlock.html("Вы уже ответили на этот вопрос");
-            else if (question.owner == auth_id)
-                messageBlock.html("Вы не можете отвечать на свой вопрос");
+            else
+                messageBlock.hide();
         }
         else {
             newAnswerForm.removeClass('hidden');
-            messageBlock.html("");
+            messageBlock.hide();
+        }
+
+        if (question.answers.length <= 0) {
+            messageBlock.html("");//На этот вопрос еще никто не ответил.");
+            messageBlock.hide();
         }
 
         // Set the hidden "question_id" input field
         $("#question-modal #question-id").val(question.id);
     })
+}
+
+function ShowCategory(category) {
+    category = JSON.parse(category);
+    console.log(category);
+
+    var citiesTemplate = _.template(document.getElementById('category-cities-template').innerHTML);
+    var citiesResult = citiesTemplate({ category: category });
+
+    var questionsTemplate = _.template(document.getElementById('category-questions-template').innerHTML);
+    var questionsResult = questionsTemplate({ category: category });
+
+    $("#category-questions").html(citiesResult+questionsResult);
+}
+
+function MoreQuestions() {
+    $.get("/category/4/getContent?page=2", function (category) {
+        category = JSON.parse(category);
+
+        var questionsTemplate = _.template(document.getElementById('category-questions-template').innerHTML);
+        var questionsResult = questionsTemplate({category: category});
+
+        $("#category-questions").append(questionsResult);
+    });
+}
+
+function GetContacts(initiator) {
+    var answer_id = $(initiator).attr("data-answer-id");
+
+    $.get("/answer/"+answer_id+"/getContacts", function (contacts) {
+        contacts = JSON.parse(contacts);
+        var haveContacts = contacts.email || contacts.phone;
+        var contactsText = "";
+
+        if (haveContacts)
+            contactsText =
+                (contacts.email ? ("E-mail: "+ contacts.email+(contacts.phone?"<br>":"")) : '') +
+                (contacts.phone ? ("Телефон: "+ contacts.phone+"<br>") : '');
+        else
+            contactsText = 'Контакты не предоставлены';
+
+        $(initiator).after(contactsText);
+        $(initiator).remove();
+    });
 }
