@@ -1,30 +1,189 @@
-.top-buffer { margin-top:20px; }
+.top-buffer {
+    margin-top: 20px;
+}
+
+.bottom-buffer {
+    margin-bottom: 20px;
+}
+
+.top-buffer-10 {
+    margin-top: 10px;
+}
+
+.bottom-buffer-10 {
+    margin-bottom: 10px;
+}
 
 .cursor-pointer { cursor: pointer; }
 
 .hidden { display: none; }
 
-.ads-container { border: 1px solid #ddd; border-radius: 3px; }
+.ads-container {
+    border: 1px solid #ddd;
+}
 
 .centered-content { width: 100%; text-align: center; }
 
+.clearfix {
+    clear: both;
+    float: none;
+}
+
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
 
 .captcha_image { cursor: pointer; }
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
     position: relative;
     min-height: 100%;
 }
+
 body {
-    /* Margin bottom by footer height */
-    margin-bottom: 60px;
+    background-color: #264 !important;
+    color: #EDD4BE;
 }
-.footer {
-    position: absolute;
-    bottom: 0;
+
+body * {
+    color: #EDD4BE;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.no-padding {
+    padding: 0 !important;
+}
+
+footer.footer {
+    padding-top: 5px;
+    padding-bottom: 5px;
     width: 100%;
     /* Set the fixed height of the footer here */
-    height: 60px;
-    background-color: #f5f5f5;
+    min-height: 60px;
+    background-color: #113121;
+    border-color: #d3e0e9;
+    border-width: 1px 0 0;
+    border-style: solid;
+}
+
+.nav-tabs.categories {
+    border: none;
+}
+
+.nav-tabs > li {
+    display: inline-flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    min-width: 20%;
+}
+
+.nav-tabs > li a {
+    border: none !important;
+    border-radius: 0;
+    font-size: 12px;
+    min-height: 60px;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-tabs > li.active a,
+.nav-tabs > li.active:hover a {
+    background-color: #badccb !important;
+    border-radius: 0;
+}
+
+.nav-tabs > li:hover a {
+    background-color: #badccb;
+    border-radius: 0;
+}
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+body > .container {
+    padding: 60px 15px 0;
+}
+
+.container .text-muted {
+    margin: 20px 0;
+}
+
+.navbar {
+    background-color: #113121;
+}
+
+.navbar * {
+    background-color: #113121;
+    color: inherit !important;
+}
+
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li > a:hover {
+    background-color: #114521;
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:focus,
+.navbar-default .navbar-nav > .open > a:hover {
+    background-color: #114521;
+}
+
+.footer > .container {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+code {
+    font-size: 80%;
+}
+
+.block {
+    background-color: #badccb;
+    border-radius: 0;
+}
+
+.block * {
+    color: black;
+}
+
+.block.ads {
+    color: black;
+    font-size: 16px;
+    width: 100%;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+}
+
+.block.ads.prime {
+    height: 300px;
+}
+
+.block.ads.banner {
+    height: 250px;
+}
+
+.btn-primary {
+    background-color: #113121;
+    color: #EDD4BE;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #113b21;
 }

@@ -1,13 +1,16 @@
 @extends('layouts.sidebars')
 
 @section('central_content')
-    <ul class="nav nav-tabs">
-        @for($i = 0; $i < $categories->count(); $i++)
-            <li class="{{$i == 0 ? 'active' : ''}}">
-                <a data-toggle="tab" href="#category" class="category-tab" data-category-id="{{$categories[$i]->id}}">{{$categories[$i]->name}}</a>
-            </li>
-        @endfor
-    </ul>
+	<div class="col-md-offset-1 col-md-10 no-padding">
+		<ul class="nav nav-tabs categories">
+	        @for($i = 0; $i < $categories->count(); $i++)
+	            <li class="col-md-2 no-padding {{$i == 0 ? 'active' : ''}}">
+	                <a data-toggle="tab" href="#category" class="category-tab" data-category-id="{{$categories[$i]->id}}">{{$categories[$i]->name}}</a>
+	            </li>
+	        @endfor
+	    </ul>
+	</div>
+	<hr class="clearfix"/>
 
     <div class="tab-content">
         @include('includes.category_tab_content')
