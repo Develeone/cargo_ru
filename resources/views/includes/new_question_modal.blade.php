@@ -29,7 +29,7 @@
                         </select>
                     </div>
 
-                    <textarea name="text" placeholder="Введите свой вопрос" class="form-control"></textarea>
+                    <textarea name="text" placeholder="Введите свой вопрос" class="form-control" maxlength="500"></textarea>
 
                     <br />
 

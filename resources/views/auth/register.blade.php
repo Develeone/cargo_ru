@@ -2,8 +2,7 @@
 
 @section('questions')
 <div class="col-md-12">
-    <div class="panel panel-default">
-        <div class="panel-heading">Регистрация</div>
+    <div class="block">
         <div class="panel-body">
             <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
                 {{ csrf_field() }}

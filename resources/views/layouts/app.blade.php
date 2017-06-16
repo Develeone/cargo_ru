@@ -38,7 +38,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                        {{ config('app.name', 'CargoCentr.ru') }}
                     </a>
                 </div>
 
@@ -85,19 +85,28 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-lg-12 ads-container">
-                    <H1>Рекламный блок</H1>
-                </div>
+                <h3 class="block ads banner no-margin">@lang('messages.ad.block')</h3>
             </div>
 
             @yield('content')
 
         </div>
 
-        <footer class="footer">
+        <footer class="footer top-buffer">
             <div class="container">
-                <p class="text-muted">Футер, который всегда располагается внизу независимо от количества контента на странице.</p>
-                <a href="/ads">Реклама на сайте</a>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <a href="/ads">Реклама на сайте</a>
+                    </div>
+                </div>
+                <div class="row top-buffer-10">
+                    <div class="col-lg-4">
+                        <div>&copy;&nbsp;@lang('messages.copyright')</div>
+                        <div>@lang('messages.ip')</div>
+                        <div>@lang('messages.inn')</div>
+                        <div>@lang('messages.city')</div>
+                    </div>
+                </div>
             </div>
         </footer>
     </div>
