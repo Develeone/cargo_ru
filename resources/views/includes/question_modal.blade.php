@@ -24,7 +24,7 @@
 
                     <br />
 
-                    <div class="g-recaptcha" data-sitekey="{{ env('RE_CAP_SITE') }}"></div>
+                    <div id="new-answer-recaptcha"></div>
 
                     <input type="submit" id="submit-answer-button" value="Отправить" class="form-control btn-success top-buffer">
                 </form>

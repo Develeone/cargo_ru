@@ -29,11 +29,11 @@
                         </select>
                     </div>
 
-                    <textarea name="text" placeholder="Введите свой вопрос" class="form-control"></textarea>
+                    <textarea name="text" placeholder="Введите свой вопрос" class="form-control" maxlength="500"></textarea>
 
                     <br />
 
-                    <div class="g-recaptcha" data-sitekey="{{ env('RE_CAP_SITE') }}"></div>
+                    <div id="new-question-recaptcha"></div>
 
                     <p><input type="submit" id="submit-question-button" value="Отправить" class="form-control btn-success top-buffer"></p>
                 </form>
