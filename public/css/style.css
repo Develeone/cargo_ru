@@ -166,6 +166,9 @@ code {
     justify-content: center;
     text-align: center;
     cursor: pointer;
+    margin: 15px 0;
+    background-position: center;
+    background-size: cover;
 }
 
 .block.ads.prime {

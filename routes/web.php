@@ -4,6 +4,7 @@
 Route::get('/', 'PageController@index');
 
 Route::get('/ads', 'PageController@adsPage');
+Route::get('/admin', 'PageController@adminPage');
 
 Route::get('/category/{id}/getContent', 'CategoryController@getContent');
 

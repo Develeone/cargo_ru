@@ -21,3 +21,11 @@
     @include('includes.question_modal')
     @include('includes.new_question_modal')
 @endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function(){
+            SetAdsBlocks();
+        });
+    </script>
+@endsection

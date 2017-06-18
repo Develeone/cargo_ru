@@ -100,7 +100,7 @@
 
     <div class="container">
         <div class="row">
-            <h3 class="block ads banner no-margin">@lang('messages.ad.block')</h3>
+            <div class="block ads banner no-margin" id="ads-block-1"></div>
         </div>
 
         @yield('content')
@@ -111,7 +111,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <a href="mailto:reklama@cargocentr.ru?subject=Реклама на сайте">Реклама на сайте</a>
+                    <a href="/ads">Реклама на сайте</a>
+                    <!--a href="mailto:reklama@cargocentr.ru?subject=Реклама на сайте">Реклама на сайте</a-->
                 </div>
             </div>
             <div class="row top-buffer-10">
@@ -122,7 +123,6 @@
                     <div>@lang('messages.city')</div>
                 </div>
             </div>
-            <a href="/ads">Реклама на сайте</a>
         </div>
     </footer>
 </div>
@@ -130,5 +130,17 @@
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('js/code.js') }}"></script>
+
+<script>
+    var ads = [];
+    @for($i = 1; $i <= 11; $i++)
+        ads[{{$i}}] = JSON.parse('{!! Ads::getBlock($i) !!}');
+    @endfor
+</script>
+
+<script src="{{ asset('js/ads_controller.js') }}"></script>
+
+@yield('scripts')
+
 </body>
 </html>
