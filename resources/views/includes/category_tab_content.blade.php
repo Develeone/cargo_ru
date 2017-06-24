@@ -1,21 +1,20 @@
 <div id="category-content" class="tab-pane fade in active">
 
-    <script type="text/template" id="category-cities-template">
-        <% if (category.need_cities) { %>
-            <div class="form-group" id="category-cities-selector-container">
-                <select class="questions-by-city-select form-control top-buffer" onchange="CategoryCityChanged($(this))">
-                    <option value="all">Все города</option>
-                    @foreach($regions as $region)
-                        <option disabled>{{ $region->name }}</option>
+    <select name="country_id" class="country-select form-control top-buffer hidden" disabled>
+        <option selected value='all'>Все страны</option>
+        @foreach(\App\Country::all() as $country)
+            <option value="{{ $country->id }}">{{ $country->name }}</option>
+        @endforeach
+    </select>
 
-                        @foreach($region->cities as $city)
-                            <option value="{{ $city->id }}" <%- category.city == {{ $city->id }} ? "selected" : "" %> >{{ $city->name }}</option>
-                        @endforeach
-                    @endforeach
-                </select>
-            </div>
-        <% } %>
-    </script>
+    <select name="region_id" class="region-select form-control top-buffer hidden" disabled>
+        <option selected value='all'>Все регионы</option>
+    </select>
+
+    <select name="city_id" class="city-select form-control top-buffer hidden" disabled>
+        <option selected value='all'>Все города</option>
+    </select>
+
 
     <script type="text/template" id="category-questions-template">
         <% for (var dateGroup in category.groupedQuestions) { %>

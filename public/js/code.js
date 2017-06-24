@@ -26,20 +26,89 @@ $("#new-question").submit(function (e) {
 });
 
 $("#new-question-modal .category-select").change(function(){
-    $needCities = $(this).find("option[value='"+$(this).val()+"']").attr("data-need-cities");
+    $.get('/category/'+$(this).val()+'/getGeoParams', function (geoParams) {
+        geoParams = JSON.parse(geoParams);
 
-    var city_select = $("#new-question-modal .city-select");
+        var needCities      = geoParams.cities;
+        var needRegions     = geoParams.regions;
+        var needCountries   = geoParams.countries;
 
-    if ($needCities) {
-        city_select.removeClass('hidden');
-        city_select.children()[0].removeAttribute('selected');
-        city_select.removeAttr('disabled');
-    }
-    else {
-        city_select.addClass('hidden');
-        city_select.attr('disabled', 'disabled');
-    }
+        var city_select     = $("#new-question-modal .city-select");
+        var region_select   = $("#new-question-modal .region-select");
+        var country_select  = $("#new-question-modal .country-select");
+
+
+        city_select.children().removeAttr('selected');
+        region_select.children().removeAttr('selected');
+        country_select.children().removeAttr('selected');
+
+        city_select.children()[0].setAttribute('selected', 'selected');
+        region_select.children()[0].setAttribute('selected', 'selected');
+        country_select.children()[0].setAttribute('selected', 'selected');
+
+        if (needCities) {
+            city_select.removeClass('hidden');
+            city_select.removeAttr('disabled');
+        }
+        else {
+            city_select.addClass('hidden');
+            city_select.attr('disabled', 'disabled');
+        }
+
+        if (needRegions) {
+            region_select.removeClass('hidden');
+            region_select.removeAttr('disabled');
+        }
+        else {
+            region_select.addClass('hidden');
+            region_select.val(1);
+            region_select.attr('disabled', 'disabled');
+        }
+
+        if (needCountries) {
+            country_select.removeClass('hidden');
+            country_select.removeAttr('disabled');
+        }
+        else {
+            country_select.addClass('hidden');
+            SetRegionsSelectByCountryId(1);
+            country_select.attr('disabled', 'disabled');
+        }
+    });
 });
+
+$("#new-question-modal .country-select").change(function() {
+    SetRegionsSelectByCountryId($(this).val());
+    SetCitiesSelectByRegionId(-1);
+});
+
+$("#new-question-modal .region-select").change(function() {
+    SetCitiesSelectByRegionId($(this).val());
+});
+
+function SetRegionsSelectByCountryId(country_id) {
+    $.get('/geo/getRegionsByCountryId/'+country_id, function(regions){
+        var options = "<option selected disabled>Выберите регион</option>";
+
+        for (var i = 0; i < regions.length; i++) {
+            options += '<option value="'+regions[i].id+'">'+regions[i].name+'</option>';
+        }
+
+        $("#new-question-modal .region-select").html(options);
+    });
+}
+
+function SetCitiesSelectByRegionId(region_id) {
+    $.get('/geo/getCitiesByRegionId/'+region_id, function(cities){
+        var options = "<option selected disabled>Выберите город</option>";
+
+        for (var i = 0; i < cities.length; i++) {
+            options += '<option value="'+cities[i].id+'">'+cities[i].name+'</option>';
+        }
+
+        $("#new-question-modal .city-select").html(options);
+    });
+}
 
 $(".category-tab").click(function(){
     selectedCategoryId = $(this).attr("data-category-id");
@@ -47,25 +116,6 @@ $(".category-tab").click(function(){
     $.get("/category/"+selectedCategoryId+"/getContent", function (category) {
         ShowCategory(category);
     })
-});
-
-function CategoryCityChanged (caller){
-    var selectedCityId = $(caller).val();
-
-    if (selectedCityId == "all") {
-        $.get("/category/"+selectedCategoryId+"/getContent", function (category) {
-            ShowCategory(category);
-        })
-    }
-
-    $.get("/category/"+selectedCategoryId+"/getContent?city="+selectedCityId, function (category) {
-        ShowCategory(category);
-    })
-}
-
-$(".captcha_image").click(function () {
-    var randomLetter = String.fromCharCode(Math.floor(Math.random() * (122 - 97)) + 97);
-    $(this).attr("src", $(this).attr("src")+randomLetter);
 });
 
 function LoadQuestionModal (questionId) {
@@ -128,17 +178,144 @@ function LoadQuestionModal (questionId) {
     })
 }
 
-function ShowCategory(category) {
+function ShowCategory(category, doNotReplaceGeo) {
     category = JSON.parse(category);
     console.log(category);
 
-    var citiesTemplate = _.template(document.getElementById('category-cities-template').innerHTML);
-    var citiesResult = citiesTemplate({ category: category });
+    if (!doNotReplaceGeo) {
+        var geoParams = category.geoParams;
+
+        var needCities = geoParams.cities;
+        var needRegions = geoParams.regions;
+        var needCountries = geoParams.countries;
+
+        var city_select = $("#category-content .city-select");
+        var region_select = $("#category-content .region-select");
+        var country_select = $("#category-content .country-select");
+
+        city_select.children().removeAttr('selected');
+        region_select.children().removeAttr('selected');
+        country_select.children().removeAttr('selected');
+
+        city_select.children()[0].setAttribute('selected', 'selected');
+        region_select.children()[0].setAttribute('selected', 'selected');
+        country_select.children()[0].setAttribute('selected', 'selected');
+
+        if (needCities) {
+            city_select.removeClass('hidden');
+            city_select.removeAttr('disabled');
+        }
+        else {
+            city_select.addClass('hidden');
+            city_select.attr('disabled', 'disabled');
+        }
+
+        if (needRegions) {
+            region_select.removeClass('hidden');
+            region_select.removeAttr('disabled');
+        }
+        else {
+            region_select.addClass('hidden');
+            region_select.val(1);
+            region_select.attr('disabled', 'disabled');
+        }
+
+        if (needCountries) {
+            country_select.removeClass('hidden');
+            country_select.removeAttr('disabled');
+        }
+        else {
+            country_select.addClass('hidden');
+            SetRegionsSelectByCountryIdCategory(1);
+            country_select.attr('disabled', 'disabled');
+        }
+    }
 
     var questionsTemplate = _.template(document.getElementById('category-questions-template').innerHTML);
     var questionsResult = questionsTemplate({ category: category });
 
-    $("#category-questions").html(citiesResult+questionsResult);
+    $("#category-questions").html(questionsResult);
+}
+
+$("#category-content .country-select").change(function() {
+    SetRegionsSelectByCountryIdCategory($(this).val());
+    SetCitiesSelectByRegionIdCategory(-1);
+
+    var selectedCountryId = $(this).val();
+
+    if (selectedCountryId == "all") {
+        $.get("/category/"+selectedCategoryId+"/getContent", function (category) {
+            ShowCategory(category, true);
+        });
+    } else {
+        $.get("/category/" + selectedCategoryId + "/getContent?country=" + selectedCountryId, function (category) {
+            ShowCategory(category, true);
+        });
+    }
+});
+
+$("#category-content .region-select").change(function() {
+    SetCitiesSelectByRegionIdCategory($(this).val());
+
+    var selectedRegionId = $(this).val();
+
+    if (selectedRegionId == "all") {
+        var country_id = $("#category-content .country-select").val();
+        var query_params = "";
+        if (country_id != "all")
+            query_params = "?country="+$("#category-content .country-select").val();
+        $.get("/category/"+selectedCategoryId+"/getContent"+query_params,
+            function (category) {
+                ShowCategory(category, true);
+            }
+        );
+    } else {
+        $.get("/category/" + selectedCategoryId + "/getContent?region=" + selectedRegionId, function (category) {
+            ShowCategory(category, true);
+        });
+    }
+});
+
+
+$("#category-content .city-select").change(function() {
+    var selectedCityId = $(this).val();
+
+    if (selectedCityId == "all") {
+        $.get("/category/"+selectedCategoryId+"/getContent?region="+$("#category-content .region-select").val(),
+            function (category) {
+                ShowCategory(category, true);
+            }
+        );
+    } else {
+        $.get("/category/" + selectedCategoryId + "/getContent?city=" + selectedCityId, function (category) {
+            ShowCategory(category, true);
+        });
+    }
+});
+
+
+function SetRegionsSelectByCountryIdCategory(country_id) {
+    $.get('/geo/getRegionsByCountryId/'+country_id, function(regions){
+        var options = "<option selected value='all'>Все регионы</option>";
+
+        for (var i = 0; i < regions.length; i++) {
+            options += '<option value="'+regions[i].id+'">'+regions[i].name+'</option>';
+        }
+
+        $("#category-content .region-select").html(options);
+    });
+}
+
+function SetCitiesSelectByRegionIdCategory(region_id) {
+    $.get('/geo/getCitiesByRegionId/'+region_id, function(cities){
+        var options = "<option selected value='all'>Все города</option>";
+
+        for (var i = 0; i < cities.length; i++) {
+            options += '<option value="'+cities[i].id+'">'+cities[i].name+'</option>';
+        }
+
+        $("#category-content .city-select").html(options);
+    });
 }
 
 function MoreQuestions() {
@@ -171,3 +348,13 @@ function GetContacts(initiator) {
         $(initiator).remove();
     });
 }
+
+$(".modal").on("hidden.bs.modal", function () {
+    grecaptcha.reset(new_question_recaptcha);
+    grecaptcha.reset(new_answer_recaptcha);
+
+    $("#new-question-text").val("");
+    $("#answer-text").val("");
+    $("#answer-email").val("");
+    $("#answer-phone").val("");
+});

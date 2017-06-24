@@ -15,20 +15,27 @@ class CategoryController extends Controller
 
         $questions = null;
 
+        $geoSelector = "";
+        $geoValue = "";
         if ($request->has("city")) {
-            $questions = Question::where("category_id", $category_id)
-                ->where("city_id", $request->get("city"))
-                ->orderBy("id", "desc")
-                ->simplePaginate(5);
-
-            $category->city = $request->get("city");
+            $geoSelector = "city_id";
+            $geoValue = $request->get("city");
         }
-        else
-            $questions = Question::where("category_id", $category_id)
-                ->orderBy("id", "desc")
-                ->simplePaginate(5);
+        elseif ($request->has("region")) {
+            $geoSelector = "region_id";
+            $geoValue = $request->get("region");
+        }
+        elseif ($request->has("country")) {
+            $geoSelector = "country_id";
+            $geoValue = $request->get("country");
+        }
 
-        //$category->links = dd($questions->links());
+        $questions = Question::where("category_id", $category_id);
+
+        if ($geoValue != "")
+                $questions = $questions->where($geoSelector, $geoValue);
+
+        $questions = $questions->orderBy("id", "desc")->simplePaginate(15);
 
         $questions->map(function ($question) {
             $date = date_format($question->created_at, 'd.m.Y');
@@ -48,7 +55,32 @@ class CategoryController extends Controller
 
         $category->groupedQuestions = collect($sortedQuestions);
 
+        $category->geoParams = $this->geoParams($category_id);
 
         return json_encode($category);
+    }
+
+    function getGeoParams($category_id) {
+        return json_encode($this->geoParams($category_id));
+    }
+
+    function geoParams($category_id){
+        $response = new \stdClass();
+
+        $category = Category::where("id", $category_id)
+            ->with("needCities")
+            ->first();
+
+        if ($category->needCities) {
+            $response->cities = $category->needCities->cities;
+            $response->regions = $category->needCities->regions;
+            $response->countries = $category->needCities->countries;
+        } else {
+            $response->cities = false;
+            $response->regions = false;
+            $response->countries = false;
+        }
+
+        return $response;
     }
 }

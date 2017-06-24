@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Question extends Model
 {
-    protected $fillable = ['owner', 'category_id', 'text', 'solved', 'city_id'];
+    protected $fillable = ['owner', 'category_id', 'text', 'solved', 'city_id', 'region_id', 'country_id'];
 
     protected $rules = [
         'text' => 'required|min:3|max:2500',

@@ -18,9 +18,9 @@
                     <H4>Ответить на вопрос:</H4>
                     {{ csrf_field() }}
                     <input type="hidden" name="question_id" id="question-id" value="">
-                    <textarea            name="text"    placeholder="Введите ваш ответ" class="form-control top-buffer"></textarea>
-                    <input type="text"   name="email"   placeholder="E-mail"    class="form-control top-buffer">
-                    <input type="text"   name="phone"   placeholder="Телефон"   class="form-control top-buffer">
+                    <textarea id="answer-text" name="text" placeholder="Введите ваш ответ" class="form-control top-buffer"></textarea>
+                    <input type="text"   name="email"   placeholder="E-mail"    class="form-control top-buffer" id="answer-email">
+                    <input type="text"   name="phone"   placeholder="Телефон"   class="form-control top-buffer" id="answer-phone">
 
                     <br />
 

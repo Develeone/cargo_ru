@@ -13,9 +13,7 @@
     <hr class="clearfix"/>
 
     <div class="tab-content">
-        @foreach($categories as $category)
-            @include('includes.category_tab_content')
-        @endforeach
+        @include('includes.category_tab_content')
     </div>
 
     @include('includes.question_modal')

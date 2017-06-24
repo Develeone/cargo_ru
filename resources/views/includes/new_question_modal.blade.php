@@ -15,21 +15,29 @@
                     <div class="form-group">
                         <select name="category_id" class="category-select form-control">
                             @foreach($categories as $category)
-                                <option value="{{$category->id}}" data-need-cities="{{!is_null($category->needCities)}}">
+                                <option value="{{$category->id}}">
                                     {{$category->name}}
                                 </option>
                             @endforeach
                         </select>
 
-                        <select name="city_id" class="city-select form-control top-buffer {{ is_null($categories->first()->needCities) ? 'hidden' : '' }}">
-                            <option selected disabled>Выберите город</option>
-                            @foreach(\App\City::all() as $city)
-                                <option value="{{ $city->id }}">{{ $city->name }}</option>
+                        <select name="country_id" class="country-select form-control top-buffer hidden" disabled>
+                            <option selected disabled>Выберите страну</option>
+                            @foreach(\App\Country::all() as $country)
+                                <option value="{{ $country->id }}">{{ $country->name }}</option>
                             @endforeach
+                        </select>
+
+                        <select name="region_id" class="region-select form-control top-buffer hidden" disabled>
+                            <option selected disabled>Выберите регион</option>
+                        </select>
+
+                        <select name="city_id" class="city-select form-control top-buffer hidden" disabled>
+                            <option selected disabled>Выберите город</option>
                         </select>
                     </div>
 
-                    <textarea name="text" placeholder="Введите свой вопрос" class="form-control" maxlength="500"></textarea>
+                    <textarea name="text" placeholder="Введите свой вопрос" class="form-control" maxlength="500" id="new-question-text"></textarea>
 
                     <br />
 

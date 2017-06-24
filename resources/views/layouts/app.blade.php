@@ -19,14 +19,14 @@
     <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaCallback&render=explicit" async defer></script>
     <script>
         var new_question_recaptcha;
-        var new_answer_recaptcha2;
+        var new_answer_recaptcha;
         var recaptchaCallback = function() {
             new_question_recaptcha = grecaptcha.render('new-question-recaptcha', {
                 'sitekey' : '{{ env('RE_CAP_SITE') }}', //Replace this with your Site key
                 'theme' : 'light'
             });
 
-            new_answer_recaptcha2 = grecaptcha.render('new-answer-recaptcha', {
+            new_answer_recaptcha = grecaptcha.render('new-answer-recaptcha', {
                 'sitekey' : '{{ env('RE_CAP_SITE') }}', //Replace this with your Site key
                 'theme' : 'dark'
             });
@@ -99,9 +99,6 @@
     </nav>
 
     <div class="container">
-        <div class="row">
-            <div class="block ads banner no-margin" id="ads-block-1"></div>
-        </div>
 
         @yield('content')
 
